@@ -28,9 +28,17 @@ const Main = () => {
     },
   ]);
 
-  // 토글 함수
+  // 토글 함수 setSelectedTodo()초기화 되는거 수정
   const onInsertToggle = (todo) => {
-    setSelectedTodo(todo);
+    if (todo != undefined) {
+      if (!insertToggle) {
+        if (todo.hasOwnProperty("id")) {
+          setSelectedTodo(todo);
+        } else {
+          setSelectedTodo(null);
+        }
+      }
+    }
     setInsertToggle((prev) => !prev);
   };
   //삭제 함수
@@ -52,6 +60,7 @@ const Main = () => {
       })
     );
   };
+  //sesetSelectedTodo 수정
   const onChangeSelectedTodo = (todo) => {
     setSelectedTodo(todo);
   };
