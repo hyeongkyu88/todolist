@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./TodoInsert.css";
 import { MdAddCircle } from "react-icons/md";
 import { TiTrash, TiPencil } from "react-icons/ti";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 const TodoInsert = ({
   onInsertToggle,
   setTodos,
@@ -14,15 +14,24 @@ const TodoInsert = ({
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    // uuid는 제거, id는 서버에서 자동으로 생성
     const newTodo = {
-      id: uuidv4(),
       text: title,
       checked: false,
     };
 
-    setTodos((prev) => {
-      return [...prev, newTodo];
-    });
+    axios
+      .post("http://localhost:3001/todo", newTodo)
+      .then((response) => {
+        console.log("todo 생성 완료", response.data.id);
+        // 생성된 데이터를 setTodos를 이용해 todos에 저장
+        setTodos((prev) => {
+          return [...prev, response.data];
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     onInsertToggle();
   };
